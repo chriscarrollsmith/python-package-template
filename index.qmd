@@ -1,0 +1,25 @@
+---
+title: "A Python Package Template"
+output: gfm
+---
+This template is designed for `uv`-powered Python packages deployed to PyPI via Github Actions, with `python-semantic-release` for versioning and Quarto for documentation.
+
+## User-facing Installation Instructions
+
+### With uv
+
+In a project:
+```bash
+uv add your-project-name
+```
+
+For one-off use:
+```bash
+uv pip install your-project-name
+```
+
+### With pip
+
+```bash
+pip install your-project-name
+```

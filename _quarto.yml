@@ -1,0 +1,24 @@
+project:
+  type: website
+  output-dir: _docs
+
+website:
+  title: "your-documentation-title"
+  navbar:
+    left:
+      - href: index.qmd
+        text: Home
+      - href: docs/more.qmd
+        text: More
+    right:
+      - icon: github
+        href: https://github.com/your-username/your-project-name
+  page-footer:
+    left: "Copyright 2025, your name. your license."
+    right:
+      - icon: github
+        href: https://github.com/your-username/your-project-name
+format:
+  html:
+    theme: cosmo
+    toc: true
