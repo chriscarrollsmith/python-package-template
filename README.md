@@ -8,44 +8,79 @@ and Quarto for documentation.
 ## Setup
 
 1.  Clone the template repository
-    `bash     git clone https://github.com/chriscarroll/python-package-template.git`
+
+    ``` bash
+    git clone https://github.com/chriscarroll/python-package-template.git
+    ```
 
 2.  Rename the folder to your project name
-    `bash     mv python-package-template your-project-name     cd your-project-name`
+
+    ``` bash
+    mv python-package-template your-project-name
+    cd your-project-name
+    ```
+
     Make sure to select a project name that is not already taken on
     [PyPi](https://pypi.org/).
 
-3.  Remove the git remote `bash     git remote remove origin`
+3.  Remove the git remote
+
+    ``` bash
+    git remote remove origin
+    ```
 
 4.  Edit pyproject.toml to set the project name and description
-    \`\`\`toml name = “your-project-name” description = “Add your
-    description here”
 
-    … other settings …
+    ``` toml
+    name = "your-project-name"
+    description = "Add your description here"
 
-    \[tool.hatch.build.targets.wheel\] packages =
-    \[“your-project-name”\] \`\`\`
+    ... other settings ...
 
-5.  Edit \_quarto.yml to set the project name and description \`\`\`yaml
-    website: title: “your-documentation-title”
+    [tool.hatch.build.targets.wheel]
+    packages = ["your-project-name"]
+    ```
 
-    … other settings …
+5.  Edit \_quarto.yml to set the project name and description
+
+    ``` yaml
+    website:
+      title: "your-documentation-title"
+
+      ... other settings ...
+
 
     right:
-
-    - icon: github href:
-      https://github.com/your-username/your-project-name page-footer:
-      left: “Copyright 2025, your name. your license.” right:
-    - icon: github href:
-      https://github.com/your-username/your-project-name \`\`\`
+      - icon: github
+        href: https://github.com/your-username/your-project-name
+     page-footer:
+    left: "Copyright 2025, your name. your license."
+    right:
+      - icon: github
+        href: https://github.com/your-username/your-project-name
+    ```
 
 6.  Rename the `project-name` folder to your project name
-    `bash     mv project-name your-project-name`
+
+    ``` bash
+    mv project-name your-project-name
+    ```
 
 7.  Publish to a new Github repository
-    `bash     git add .     git commit -m "Initial commit"     gh repo create your-project-name --public --source=. --remote=origin     git push -u origin main`
 
-8.  Create a “PyPi” environment on Github `bash     gh repo view --web`
+    ``` bash
+    git add .
+    git commit -m "Initial commit"
+    gh repo create your-project-name --public --source=. --remote=origin
+    git push -u origin main
+    ```
+
+8.  Create a “PyPi” environment on Github
+
+    ``` bash
+    gh repo view --web
+    ```
+
     Open “Settings” -\> “Environments” -\> “New Environment”, name it
     “PyPi” and click “Create environment”.
 
@@ -58,20 +93,34 @@ and Quarto for documentation.
     Then click “Add”.
 
 10. Configure the documentation website to publish from the `gh-pages`
-    branch `bash     gh repo view --web` Open “Settings” -\> “Pages” and
-    select “Deploy from a branch” from the dropdown menu under “Source”
-    and select “gh-pages” from the Branch dropdown menu. Click “Save”.
+    branch
+
+    ``` bash
+    gh repo view --web
+    ```
+
+    Open “Settings” -\> “Pages” and select “Deploy from a branch” from
+    the dropdown menu under “Source” and select “gh-pages” from the
+    Branch dropdown menu. Click “Save”.
 
 11. Install a pre-commit hook to enforce conventional commit messages
-    `bash     curl -o- https://raw.githubusercontent.com/chriscarrollsmith/conventional-commits-git-hook/master/scripts/install.sh | sh`
+
+    ``` bash
+    curl -o- https://raw.githubusercontent.com/chriscarrollsmith/conventional-commits-git-hook/master/scripts/install.sh | sh
+    ```
 
 12. Set up a branch protection rule to require a pull request before
-    merging to main `bash     gh repo view --web` Open “Settings” -\>
-    “Branches” and click “Add rule”. Name the rule “main,” enable
-    enforcement, and select “Include default branch” from the dropdown
-    menu under “Target branches”. Then select “Require a pull request
-    before merging” and, optionally, set “Required approvals” to 1.
-    Click “Create” to create the rule.
+    merging to main
+
+    ``` bash
+    gh repo view --web
+    ```
+
+    Open “Settings” -\> “Branches” and click “Add rule”. Name the rule
+    “main,” enable enforcement, and select “Include default branch” from
+    the dropdown menu under “Target branches”. Then select “Require a
+    pull request before merging” and, optionally, set “Required
+    approvals” to 1. Click “Create” to create the rule.
 
 ## Development
 
@@ -181,6 +230,10 @@ uv run quarto render index.qmd --output-dir . --output README.md --to gfm
 Note that documentation is rendered on each push to the `main` branch,
 so you should not need to manually render the documentation unless you
 want to preview changes.
+
+Due to a Quarto CLI bug, you may get an extraneous `index.html` file in
+the root directory when you render the `README.md` file. You can safely
+delete it.
 
 ### Git flow
 
