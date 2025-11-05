@@ -1,0 +1,281 @@
+# A Python Package Template
+
+
+This template is designed for `uv`-powered Python packages deployed to
+PyPI via Github Actions, with `python-semantic-release` for versioning
+and Quarto for documentation.
+
+## Setup
+
+1.  Clone the template repository
+    `bash     git clone https://github.com/chriscarroll/python-package-template.git`
+
+2.  Rename the folder to your project name
+    `bash     mv python-package-template your-project-name     cd your-project-name`
+    Make sure to select a project name that is not already taken on
+    [PyPi](https://pypi.org/).
+
+3.  Remove the git remote `bash     git remote remove origin`
+
+4.  Edit pyproject.toml to set the project name and description
+    \`\`\`toml name = “your-project-name” description = “Add your
+    description here”
+
+    … other settings …
+
+    \[tool.hatch.build.targets.wheel\] packages =
+    \[“your-project-name”\] \`\`\`
+
+5.  Edit \_quarto.yml to set the project name and description \`\`\`yaml
+    website: title: “your-documentation-title”
+
+    … other settings …
+
+    right:
+
+    - icon: github href:
+      https://github.com/your-username/your-project-name page-footer:
+      left: “Copyright 2025, your name. your license.” right:
+    - icon: github href:
+      https://github.com/your-username/your-project-name \`\`\`
+
+6.  Rename the `project-name` folder to your project name
+    `bash     mv project-name your-project-name`
+
+7.  Publish to a new Github repository
+    `bash     git add .     git commit -m "Initial commit"     gh repo create your-project-name --public --source=. --remote=origin     git push -u origin main`
+
+8.  Create a “PyPi” environment on Github `bash     gh repo view --web`
+    Open “Settings” -\> “Environments” -\> “New Environment”, name it
+    “PyPi” and click “Create environment”.
+
+9.  Add a new “pending publisher” on PyPi Navigate to PyPi and create an
+    account if you don’t already have one. Then login, navigate to
+    [“Publishing”](https://pypi.org/manage/account/publishing/) on your
+    Account page, and fill out the fields to “Add a new pending
+    publisher” from GitHub. Set “workflow” to “release.yml” and
+    “environment” to “PyPi”. (The other fields are self-explanatory.)
+    Then click “Add”.
+
+10. Configure the documentation website to publish from the `gh-pages`
+    branch `bash     gh repo view --web` Open “Settings” -\> “Pages” and
+    select “Deploy from a branch” from the dropdown menu under “Source”
+    and select “gh-pages” from the Branch dropdown menu. Click “Save”.
+
+11. Install a pre-commit hook to enforce conventional commit messages
+    `bash     curl -o- https://raw.githubusercontent.com/chriscarrollsmith/conventional-commits-git-hook/master/scripts/install.sh | sh`
+
+12. Set up a branch protection rule to require a pull request before
+    merging to main `bash     gh repo view --web` Open “Settings” -\>
+    “Branches” and click “Add rule”. Name the rule “main,” enable
+    enforcement, and select “Include default branch” from the dropdown
+    menu under “Target branches”. Then select “Require a pull request
+    before merging” and, optionally, set “Required approvals” to 1.
+    Click “Create” to create the rule.
+
+## Development
+
+### Project structure
+
+The source files for your project live in the `project-name` folder,
+which typically has the same name as the root folder. Tests live in
+`tests`, and documentation lives in `docs`. The README is auto-generated
+from the `index.qmd` file by the `publish.yml` workflow, and the
+CHANGELOG is auto-generated based on the commit history by the
+`release.yml` workflow.
+
+    your-project-name/
+    ├── README.md
+    ├── index.qmd
+    ├── _quarto.yml
+    ├── CHANGELOG.md
+    ├── docs/
+    ├── tests/
+    ├── your-project-name/
+    ├── .github/
+    └── pyproject.toml
+
+### Dependency management
+
+To add a new dependency to your project, use:
+
+``` bash
+uv add dependency-name
+```
+
+To add a development dependency, use the `dev` flag:
+
+``` bash
+uv add --dev dependency-name
+```
+
+### Source code
+
+Source code goes in the `your-project-name` folder. Module names should
+be in `snake_case`.
+
+Public functions and classes should be documented with docstrings and
+annotated with type hints.
+
+To type check the source code, use:
+
+``` bash
+uv run mypy
+```
+
+To lint the source code, use:
+
+``` bash
+uv run ruff check
+```
+
+To format the source code, use:
+
+``` bash
+uv run ruff format
+```
+
+### Tests
+
+Tests are written using the `pytest` framework.
+
+The usual (but by no means binding) convention is that for each source
+file in the `your-project-name` folder, there should be a corresponding
+test file named `test_<source-filename>.py` in the `tests` folder. For
+example, if you have a file named `your-project-name/some_module.py`,
+you would create a test file named `tests/test_some_module.py`.
+
+To run the tests, use:
+
+``` bash
+uv run pytest
+```
+
+To measure test coverage, run the tests with the `--cov` flag:
+
+``` bash
+uv run pytest --cov
+```
+
+### Documentation
+
+The `index.md` file serves as both the landing page of the documentation
+website and the README for your project. Additional website pages can be
+added by creating new `.qmd` files in the `docs` folder. Then, in
+`_quarto.yml`, add new items to the `navbar` list under `left` with the
+href to the new page and the text to use for the left menu navigation
+link.
+
+To build the documentation website, use:
+
+``` bash
+uv run quarto render
+```
+
+To render the README.md file, use:
+
+``` bash
+uv run quarto render index.qmd --output-dir . --output README.md --to gfm
+```
+
+Note that documentation is rendered on each push to the `main` branch,
+so you should not need to manually render the documentation unless you
+want to preview changes.
+
+### Git flow
+
+The `main` branch is the production branch. All development should be
+done on a feature branch. To create a new feature branch from a GitHub
+issue, use [the `gh` CLI](https://cli.github.com/):
+
+``` bash
+gh issue develop <issue-number>
+git switch <branch-name>
+```
+
+Then, make your changes and add and commit them with a [conventional
+commit message](https://www.conventionalcommits.org/en/v1.0.0/). Allowed
+tags are: `feat`, `fix`, `perf`, `build`, `chore`, `ci`, `docs`,
+`style`, `refactor`, `test`. For example:
+
+``` bash
+git add .
+git commit -m "feat: add new feature"
+```
+
+Once you have made all desired changes, push the branch to GitHub and
+create a pull request:
+
+``` bash
+git push origin <branch-name>
+gh pr create -t "<short-title>" -b "<long-description>"
+```
+
+Then, wait for approval (if required) and merge the pull request:
+
+``` bash
+gh pr merge <pull-request-number> --squash
+```
+
+The minor version will be incremented upon PR merge if the PR includes
+any `fix` or `perf` commits, and the patch version will be incremented
+if the PR includes any `feat` commits. To trigger a major version
+increment, either add an exclation mark (!) after the commit tag but
+before the colon, or add a footer to a commit message that starts with
+`BREAKING CHANGE:`. Examples:
+
+``` bash
+git commit -m "feat!: add new feature"
+git commit -m "feat: add new feature" -m "BREAKING CHANGE: this commit breaks the API"
+```
+
+### Versioning
+
+Versioning is handled by `python-semantic-release`. When you are ready
+to release a new version, run:
+
+``` bash
+uv run semantic-release
+```
+
+## User-facing Installation Instructions
+
+Once your project is released on PyPi, your users can install it with
+either `uv` or `pip`.
+
+### With uv
+
+In a project:
+
+``` bash
+uv add your-project-name
+```
+
+For one-off use:
+
+``` bash
+uv pip install your-project-name
+```
+
+For CLI tools:
+
+``` bash
+uv tool install your-project-name
+# or, to use the tool directly without a separate installation step
+uvx your-project-name
+```
+
+### With pip
+
+``` bash
+pip install your-project-name
+```
+
+For CLI tools:
+
+``` bash
+pip install -g your-project-name
+```
+
+Note: global installation with pip is not recommended; use `uv` for CLI
+tools instead.
